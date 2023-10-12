@@ -1,0 +1,10 @@
+# Ignore compiled binaries
+*.exe
+*.out
+
+# Ignore build files
+/bin/
+/pkg/
+
+# Ignore .DS_Store on macOS
+.DS_Store
