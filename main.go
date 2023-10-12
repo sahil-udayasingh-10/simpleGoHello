@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 )
 
@@ -27,6 +29,17 @@ func main() {
 
 	// Set the custom logger as the default logger
 	log.SetOutput(logger.Writer())
+
+	// Handle Ctrl+C or SIGTERM to clean up before exiting
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		fmt.Println("\nShutting down server...")
+		// Remove the log file when shutting down
+		os.Remove("server.log")
+		os.Exit(0)
+	}()
 
 	http.HandleFunc("/", handler)
 
